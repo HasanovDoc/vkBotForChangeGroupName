@@ -12,7 +12,7 @@ flag = True
 
 def changeName(id, text):
     vk_session.method('messages.editChat', {'chat_id': id, 'title': text})
-    flag = False
+    return False
     
 def sendMessage(id, text):
     vk_session.method('messages.send', {'chat_id': id, 'random_id': 0, 'message': text})
@@ -30,13 +30,12 @@ for event in longpoll.listen():
             msg = event.object.message['text'].lower()
             id = event.chat_id         
             #if msg == '/changename':
-            
             if datetime.datetime.today().weekday() != 0:
                 flag = True
             else:
                 flag = False
             titleChat = getTitleChatName(id)
-            if datetime.datetime.today().weekday() == 0 and flag:
+            if flag:#datetime.datetime.today().weekday() == 0 and flag:
                 if titleChat.count('ЧИСЛИТЕЛЬ') == 1:
                     flag = changeName(id, titleChat.replace('ЧИСЛИТЕЛЬ', 'ЗНАМЕНАТЕЛЬ'))
                 elif titleChat.count('ЗНАМЕНАТЕЛЬ') == 1:
