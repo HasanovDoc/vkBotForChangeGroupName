@@ -9,6 +9,8 @@ longpoll = VkBotLongPoll(vk_session, groupId)
 
 flag = True
 
+WEEKDAYNUM = 0
+
 
 def changeName(id, text):
     vk_session.method('messages.editChat', {'chat_id': id, 'title': text})
@@ -30,16 +32,18 @@ for event in longpoll.listen():
             msg = event.object.message['text'].lower()
             id = event.chat_id         
             #if msg == '/changename':
-            if datetime.datetime.today().weekday() != 0:
-                flag = True
-            else:
-                flag = False
             titleChat = getTitleChatName(id)
-            if datetime.datetime.today().weekday() == 0 and flag:
+            print(f'Номер дня: {datetime.datetime.today().weekday()}\nflag: {flag}')
+            if datetime.datetime.today().weekday() == WEEKDAYNUM and flag:
                 if titleChat.count('ЧИСЛИТЕЛЬ') == 1:
                     flag = changeName(id, titleChat.replace('ЧИСЛИТЕЛЬ', 'ЗНАМЕНАТЕЛЬ'))
                 elif titleChat.count('ЗНАМЕНАТЕЛЬ') == 1:
                     flag = changeName(id, titleChat.replace('ЗНАМЕНАТЕЛЬ', 'ЧИСЛИТЕЛЬ'))
+
+            if datetime.datetime.today().weekday() != WEEKDAYNUM:
+                flag = True
+            else:
+                flag = False
             #sendMessage(id, f'{datetime.datetime.today().weekday()}, {id}')
 
 
