@@ -35,7 +35,7 @@ for event in longpoll.listen():
             else:
                 flag = False
             titleChat = getTitleChatName(id)
-            if flag:#datetime.datetime.today().weekday() == 0 and flag:
+            if datetime.datetime.today().weekday() == 0 and flag:
                 if titleChat.count('ЧИСЛИТЕЛЬ') == 1:
                     flag = changeName(id, titleChat.replace('ЧИСЛИТЕЛЬ', 'ЗНАМЕНАТЕЛЬ'))
                 elif titleChat.count('ЗНАМЕНАТЕЛЬ') == 1:
