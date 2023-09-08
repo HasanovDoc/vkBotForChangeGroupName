@@ -31,20 +31,23 @@ for event in longpoll.listen():
         if event.from_chat:
             msg = event.object.message['text'].lower()
             id = event.chat_id         
-            #if msg == '/changename':
+            if msg == '/bothello':
+                sendMessage(id, "Привет! Я бот, который меняет название беседы.")
             titleChat = getTitleChatName(id)
-            print(f'Номер дня: {datetime.datetime.today().weekday()}\nflag: {flag}')
+            #print(f'Номер дня: {datetime.datetime.today().weekday()}\nflag: {flag}')
             if datetime.datetime.today().weekday() == WEEKDAYNUM and flag:
                 if titleChat.count('ЧИСЛИТЕЛЬ') == 1:
                     flag = changeName(id, titleChat.replace('ЧИСЛИТЕЛЬ', 'ЗНАМЕНАТЕЛЬ'))
                 elif titleChat.count('ЗНАМЕНАТЕЛЬ') == 1:
                     flag = changeName(id, titleChat.replace('ЗНАМЕНАТЕЛЬ', 'ЧИСЛИТЕЛЬ'))
+                else:
+                    sendMessage(id, "В названии беседы нет слов: ЧИСЛИТЕЛЬ или ЗНАМЕНАТЕЛЬ.")
 
             if datetime.datetime.today().weekday() != WEEKDAYNUM:
                 flag = True
             else:
                 flag = False
-            #sendMessage(id, f'{datetime.datetime.today().weekday()}, {id}')
+
 
 
 
