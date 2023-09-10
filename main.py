@@ -9,12 +9,13 @@ longpoll = VkBotLongPoll(vk_session, groupId)
 
 flag = True
 
-WEEKDAYNUM = 0
+WEEKDAYNUM = 1 #В какой день недели менять название беседы, (По умолчанию 0 - Понедельник)
+weeNum = datetime.datetime.today().isocalendar().week #Текущий номер недели
 
 
-def changeName(id, text):
+def changeTitleName(id, text):
     vk_session.method('messages.editChat', {'chat_id': id, 'title': text})
-    return False
+    
     
 def sendMessage(id, text):
     vk_session.method('messages.send', {'chat_id': id, 'random_id': 0, 'message': text})
@@ -26,28 +27,31 @@ def getTitleChatName(id):
         title = chat_settings['title']
     return title
 
+
+
+sendMessage(2, "Бот запущен")
+
 for event in longpoll.listen():
+    weeNum = datetime.datetime.today().isocalendar().week
+    id = event.chat_id
+    titleChat = getTitleChatName(id)
+    
+    if datetime.datetime.today().weekday() == WEEKDAYNUM:
+        if weeNum % 2 == 0:
+            if titleChat.count('ЗНАМЕНАТЕЛЬ') == 1:
+                changeTitleName(id, titleChat.replace('ЗНАМЕНАТЕЛЬ', 'ЧИСЛИТЕЛЬ'))
+        if weeNum % 2 == 1:
+            if titleChat.count('ЧИСЛИТЕЛЬ') == 1:
+                changeTitleName(id, titleChat.replace('ЧИСЛИТЕЛЬ', 'ЗНАМЕНАТЕЛЬ'))
+                
+
     if event.type == VkBotEventType.MESSAGE_NEW:
         if event.from_chat:
             msg = event.object.message['text'].lower()
-            id = event.chat_id         
+                        
             if msg == '/bothello':
                 sendMessage(id, "Привет! Я бот, который меняет название беседы.")
-            titleChat = getTitleChatName(id)
-            #print(f'Номер дня: {datetime.datetime.today().weekday()}\nflag: {flag}')
-            if datetime.datetime.today().weekday() == WEEKDAYNUM and flag:
-                if titleChat.count('ЧИСЛИТЕЛЬ') == 1:
-                    flag = changeName(id, titleChat.replace('ЧИСЛИТЕЛЬ', 'ЗНАМЕНАТЕЛЬ'))
-                elif titleChat.count('ЗНАМЕНАТЕЛЬ') == 1:
-                    flag = changeName(id, titleChat.replace('ЗНАМЕНАТЕЛЬ', 'ЧИСЛИТЕЛЬ'))
-                else:
-                    sendMessage(id, "В названии беседы нет слов: ЧИСЛИТЕЛЬ или ЗНАМЕНАТЕЛЬ.")
-
-            if datetime.datetime.today().weekday() != WEEKDAYNUM:
-                flag = True
-            else:
-                flag = False
-
+            
 
 
 
