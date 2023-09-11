@@ -7,10 +7,8 @@ from config import *
 vk_session = vk_api.VkApi(token = main_token)
 longpoll = VkBotLongPoll(vk_session, groupId)
 
-flag = True
-
 WEEKDAYNUM = 1 #В какой день недели менять название беседы, (По умолчанию 0 - Понедельник)
-weeNum = datetime.datetime.today().isocalendar().week #Текущий номер недели
+weeNum = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=+4))).isocalendar().week #Текущий номер недели
 
 
 def changeTitleName(id, text):
@@ -32,11 +30,11 @@ def getTitleChatName(id):
 sendMessage(2, "Бот запущен")
 
 for event in longpoll.listen():
-    weeNum = datetime.datetime.today().isocalendar().week
+    weeNum = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=+4))).isocalendar().week
     id = event.chat_id
     titleChat = getTitleChatName(id)
     
-    if datetime.datetime.today().weekday() == WEEKDAYNUM:
+    if datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=+4))).weekday() == WEEKDAYNUM:
         if weeNum % 2 == 0:
             if titleChat.count('ЗНАМЕНАТЕЛЬ') == 1:
                 changeTitleName(id, titleChat.replace('ЗНАМЕНАТЕЛЬ', 'ЧИСЛИТЕЛЬ'))
