@@ -7,7 +7,7 @@ from config import *
 vk_session = vk_api.VkApi(token = main_token)
 longpoll = VkBotLongPoll(vk_session, groupId)
 
-WEEKDAYNUM = 1 #В какой день недели менять название беседы, (По умолчанию 0 - Понедельник)
+WEEKDAYNUM = 0 #В какой день недели менять название беседы, (По умолчанию 0 - Понедельник)
 weeNum = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=+4))).isocalendar().week #Текущий номер недели
 
 
